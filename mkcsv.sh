@@ -41,7 +41,7 @@ generate_months_list() {
   current_month=$((starting_month-1))
   current_year=$starting_year
 
-  for i in {1..12}; do
+  for (( i=1; i<=$password_count; i++ )); do
     months_list+=("${months[$current_month]} ${current_year}")
 
     current_month=$((current_month+1))
@@ -62,6 +62,8 @@ if [ -f .env ]; then
 fi
 
 network_name=$(printenv NETWORK_NAME)
+password_length=$(printenv PASSWORD_LENGTH)
+password_count=$(printenv PASSWORD_COUNT)
 
 read_starting_dates
 generate_months_list
@@ -69,7 +71,7 @@ generate_months_list
 echo "Generating CSV contents..."
 
 for month in "${months_list[@]}"; do
-  password=$(cat /dev/urandom | LC_ALL=C tr -dc 'a-zA-Z0-9' | fold -w 8 | sed 1q)
+  password=$(cat /dev/urandom | LC_ALL=C tr -dc 'a-zA-Z0-9' | fold -w $password_length | sed 1q)
   qr_code="WIFI:S:${network_name};T:WPA;P:${password};;"
   row="\"${month}\",\"${password}\",\"${network_name}\",\"${qr_code}\""
 
