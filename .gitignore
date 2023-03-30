@@ -1,0 +1,6 @@
+passwords.csv
+*.idlk
+qrcodes-merged.indd
+qrcodes-merged.pdf
+.DS_Store
+.env
